@@ -6,18 +6,16 @@ pipeline {
     parameters {
         string(name: 'person', defaultValue: 'Saurav Sharma', description: "Who are you?")
         booleanParam(name: 'isMale', defaultValue: true, description: "")
-        choice(name: 'City', choices: ['Jaipur','Mumbai','Pune' ], description: "")
+        choice(name: 'City', choices: ['Jaipur','Mumbai','Pune'], description: "")
     }
     stages {
         stage('Run A command') {
             steps {
-                sh '''
-                ls
-                date
-                pwd
-                cal 2021
+                bat '''
+                echo %DATE%
+                dir
+                echo %CD%
                 '''
-                
             }
         }
         stage('Environment Variables') {
@@ -25,16 +23,16 @@ pipeline {
                 username = 'myusername'
             }
             steps {
-                sh 'echo  "${BUILD_ID}"'
-                sh 'echo  "${name}"'
-                sh 'echo  "${username}"'
+                bat 'echo %BUILD_ID%'
+                bat 'echo %name%'
+                bat 'echo %username%'
             }
         }
         stage('Parameters') {
             steps {
                 echo 'deploy on test'
-                sh 'echo "${name}"'
-                sh 'echo  "${person}"'
+                bat 'echo %name%'
+                bat 'echo %person%'
             }
         }
         stage('Continue ?') {
@@ -42,7 +40,6 @@ pipeline {
                 message "Should we continue?"
                 ok "Yes we Should"
             }
-            
             steps {
                 echo 'deploy on prod'
             }
@@ -53,15 +50,15 @@ pipeline {
             }
         }
     }
-    post{
-        always { 
+    post {
+        always {
             echo 'I will always say Hello again!'
         }
-        failure{
+        failure {
             echo 'Failure'
         }
-        success{
-            echo 'Successs'
+        success {
+            echo 'Success'
         }
     }
 }
